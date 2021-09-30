@@ -101,9 +101,15 @@ export function removeKeyNonDestructive(object, key) {
  */
 export function removeKeys(object, keyList) {
   let newobj = {}
-  for (let key in Object.keys(object)) {
-    newobj[key] = object[key]
-  }
-  keyList.forEach(key => newobj = removeKeyNonDestructive(newobj, key))
+  Object.keys(object).forEach(k => newobj[k] = object[k])
+  keyList.forEach(k => newobj = Object.keys(newobj).includes(k) ? removeKeyNonDestructive(newobj, k) : newobj)
   return newobj
 }
+
+console.log(identifyVariable(3))
+console.log(identifyArray([3,"some"]))
+let t = {"hi": "there", 3: 1}
+removeKey(t, "hi")
+t["test"] = "thingy"
+console.log(removeKeyNonDestructive(t, "test"))
+console.log(removeKeys(t, ['3', "test"]))
