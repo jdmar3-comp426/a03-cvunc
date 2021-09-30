@@ -58,6 +58,13 @@ export function maxAndMin(numbers) {
  *
  */
 export function countArray(array) {
-  counts = {}
-  array.forEach(e => counts[e] = Object.keys(counts).includes(e) ? counts[e] + 1 : 1)
+  let counts = {}
+  array.forEach(e => counts[e] = e in counts ? counts[e] + 1 : 1)
+  return counts
 }
+
+// ME
+console.log(sumToString(3,4))
+console.log(getIncreasingArray(4,9))
+console.log(maxAndMin([3,6,7,2,4,1,10]))
+console.log(countArray([3,3,3]))
