@@ -18,7 +18,7 @@ queries.
  *
  */
 export function searchHighPower(car_data, minHorsepower, minTorque) {
-
+  return car_data.filter(car => car["horsepower"] >= minHorsepower && car["torque"] >= minTorque).sort((a, b) => b["horsepower"] - a["horsepower"])
 }
 
 
@@ -33,7 +33,7 @@ export function searchHighPower(car_data, minHorsepower, minTorque) {
  *
  */
 export function searchMpg(car_data, minCity, minHighway) {
-
+  return car_data.filter(car => car["highway_mpg"] >= minHighway && car["city_mpt"] >= minCity).sort((a, b) => b["highway_mpg"] - a["highway_mpg"])
 }
 
 
