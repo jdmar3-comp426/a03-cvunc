@@ -88,6 +88,20 @@ console.log(allCarStats)
  * }
  */
 export const moreStats = {
-    makerHybrids: undefined,
+    makerHybrids: mpg_data.reduce((p, car) => {
+      if (p.map(e => e["make"]).includes(car["make"])) {
+        p.forEach(e => {
+          if (e["make"] == car["make"]) {
+            if (car["hybrid"]) {
+              e["hybrids"].push(car["id"])
+            }
+          }
+        })
+      } else {
+        p.push({"make": car["make"], "hybrids": [car["id"]]})
+      }
+      return p.sort((a, b) => b["hybrids"].length - a["hybrids"].length)
+    }, []),
     avgMpgByYearAndHybrid: undefined
 };
+console.log(moreStats["makerHybrids"])
