@@ -28,8 +28,6 @@ export const allCarStats = {
   ratioHybrids: mpg_data.map(e => e["hybrid"]).reduce((s, e) => s + e) / mpg_data.length,
 };
 
-console.log(allCarStats)
-
 /**
  * HINT: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
  *
@@ -102,6 +100,31 @@ export const moreStats = {
       }
       return p.sort((a, b) => b["hybrids"].length - a["hybrids"].length)
     }, []),
-    avgMpgByYearAndHybrid: undefined
+
+    avgMpgByYearAndHybrid: mpg_data.reduce((p, car) => {
+      let hy = car["hybrid"] ? "hybrid" : "notHybrid"
+      if (car["year"] in p) {
+        p[car["year"]][hy]["city"] = (p[car["year"]][hy]["city"] * p[car["year"]][hy]["count"] + car["city_mpg"]) / (p[car["year"]][hy]["count"] + 1)
+        p[car["year"]][hy]["highway"] = (p[car["year"]][hy]["highway"] * p[car["year"]][hy]["count"] + car["highway_mpg"]) / (p[car["year"]][hy]["count"] + 1)
+        p[car["year"]][hy]["count"] += 1
+      } else {
+        p[car["year"]] = {
+          "hybrid": {
+            "count": 0,
+            "city": 0, 
+            "highway": 0 
+          },
+          "notHybrid": {
+            "count": 0,
+            "city": 0, 
+            "highway": 0
+          }
+        }
+        p[car["year"]][hy]["count"] = 1 
+        p[car["year"]][hy]["city"] = car["city_mpg"]
+        p[car["year"]][hy]["highway"] = car["highway_mpg"]
+      }
+      return p
+    }, {})
 };
-console.log(moreStats["makerHybrids"])
+console.log(moreStats["avgMpgByYearAndHybrid"]["2009"])
