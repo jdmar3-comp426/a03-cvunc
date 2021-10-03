@@ -101,30 +101,37 @@ export const moreStats = {
       return p.sort((a, b) => b["hybrids"].length - a["hybrids"].length)
     }, []),
 
-    avgMpgByYearAndHybrid: mpg_data.reduce((p, car) => {
+    avgMpgByYearAndHybrid: mpg_data.reduce((d, car) => {
+      let p = d[0], counts = d[1]
       let hy = car["hybrid"] ? "hybrid" : "notHybrid"
       if (car["year"] in p) {
-        p[car["year"]][hy]["city"] = (p[car["year"]][hy]["city"] * p[car["year"]][hy]["count"] + car["city_mpg"]) / (p[car["year"]][hy]["count"] + 1)
-        p[car["year"]][hy]["highway"] = (p[car["year"]][hy]["highway"] * p[car["year"]][hy]["count"] + car["highway_mpg"]) / (p[car["year"]][hy]["count"] + 1)
-        p[car["year"]][hy]["count"] += 1
+        p[car["year"]][hy]["city"] = (p[car["year"]][hy]["city"] * counts[car["year"]][hy] + car["city_mpg"]) / (counts[car["year"]][hy] + 1)
+        p[car["year"]][hy]["highway"] = (p[car["year"]][hy]["highway"] * counts[car["year"]][hy] + car["highway_mpg"]) / (counts[car["year"]][hy] + 1)
+        counts[car["year"]][hy] += 1
       } else {
         p[car["year"]] = {
           "hybrid": {
-            "count": 0,
             "city": 0, 
             "highway": 0 
           },
           "notHybrid": {
-            "count": 0,
             "city": 0, 
             "highway": 0
           }
         }
-        p[car["year"]][hy]["count"] = 1 
         p[car["year"]][hy]["city"] = car["city_mpg"]
         p[car["year"]][hy]["highway"] = car["highway_mpg"]
+
+        counts[car["year"]] = {
+          "hybrid": 0,
+          "notHybrid": 0
+        }
+        counts[car["year"]][hy] = 1
       }
-      return p
-    }, {})
+      return [p, counts]
+    }, [{},{}])[0]
 };
-console.log(moreStats["avgMpgByYearAndHybrid"]["2009"])
+console.log("2009: ", moreStats["avgMpgByYearAndHybrid"]["2009"])
+console.log("2010: ", moreStats["avgMpgByYearAndHybrid"]["2010"])
+console.log("2011: ", moreStats["avgMpgByYearAndHybrid"]["2011"])
+console.log("2012: ", moreStats["avgMpgByYearAndHybrid"]["2012"])
