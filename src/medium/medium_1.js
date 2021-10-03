@@ -68,5 +68,7 @@ export function getStatistics(array) {
   })
   statistics["min"] = min
   statistics["max"] = max
+  statistics["variance"] = variance(array, getSum(array) / array.length)
+  statistics["standard_deviation"] = Math.sqrt(statistics["variance"])
+  return statistics
 }
-
