@@ -89,7 +89,7 @@ export const moreStats = {
     makerHybrids: mpg_data.reduce((p, car) => {
       if (p.map(e => e["make"]).includes(car["make"])) {
         p.forEach(e => {
-          if (e["make"] == car["make"]) {
+          if (e["make"] === car["make"]) {
             if (car["hybrid"]) {
               e["hybrids"].push(car["id"])
             }
@@ -131,7 +131,3 @@ export const moreStats = {
       return [p, counts]
     }, [{},{}])[0]
 };
-console.log("2009: ", moreStats["avgMpgByYearAndHybrid"]["2009"])
-console.log("2010: ", moreStats["avgMpgByYearAndHybrid"]["2010"])
-console.log("2011: ", moreStats["avgMpgByYearAndHybrid"]["2011"])
-console.log("2012: ", moreStats["avgMpgByYearAndHybrid"]["2012"])
