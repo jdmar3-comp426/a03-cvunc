@@ -44,7 +44,7 @@ export function maxAndMin(numbers) {
     min = Math.min(min, numbers[i])
     max = Math.max(max, numbers[i])
   }
-  return {"min": min, "max": max}
+  return {"max": max, "min": min}
 }
 
 /**
