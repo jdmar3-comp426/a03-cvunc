@@ -22,9 +22,8 @@ export function getSum(array) {
  * console.log(getMedian(array)); // 4.5
  */
 export function getMedian(array) {
-  console.log(array)
   let newa = [...array]
-  newa.sort()
+  newa.sort((a, b) => a - b)
   if (newa.length % 2 != 0) {
     return newa[parseInt(newa.length / 2)]
   } else {
