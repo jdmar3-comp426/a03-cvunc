@@ -112,7 +112,7 @@ export const everyEven = (arr, test) => {
  *    someEven([0, 0, 0, 0, 0], x => x === 0)  <--  returns true
  */
 export const someEven = (arr, test) => {
-  return arr.reduce((b, c, i) => i % 2 === 0 ? b || test(c) : b, true)
+  return arr.reduce((b, c, i) => i % 2 === 0 ? b || test(c) : b, false)
 };
 
 
