@@ -20,11 +20,13 @@ see under the methods section
  * @param {allCarStats.ratioHybrids} ratio of cars that are hybrids
  */
 export const allCarStats = {
-    avgMpg: undefined,
-    allYearStats: undefined,
-    ratioHybrids: undefined,
+  avgMpg: {
+    "city": mpg_data.map(e => e["city_mpg"]).reduce((s, e) => s + e) / mpg_data.length,
+    "highway": mpg_data.map(e => e["highway_mpg"]).reduce((s, e) => s + e) / mpg_data.length
+  },
+  allYearStats: getStatistics(mpg_data.map(e => e["year"])),
+  ratioHybrids: mpg_data.map(e => e["hybrid"]).reduce((s, e) => s + e) / mpg_data.length,
 };
-
 
 /**
  * HINT: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
@@ -84,6 +86,48 @@ export const allCarStats = {
  * }
  */
 export const moreStats = {
-    makerHybrids: undefined,
-    avgMpgByYearAndHybrid: undefined
+    makerHybrids: mpg_data.reduce((p, car) => {
+      if (p.map(e => e["make"]).includes(car["make"])) {
+        p.forEach(e => {
+          if (e["make"] === car["make"]) {
+            if (car["hybrid"]) {
+              e["hybrids"].push(car["id"])
+            }
+          }
+        })
+      } else {
+        p.push({"make": car["make"], "hybrids": [car["id"]]})
+      }
+      return p.sort((a, b) => b["hybrids"].length - a["hybrids"].length)
+    }, []),
+
+    avgMpgByYearAndHybrid: mpg_data.reduce((d, car) => {
+      let p = d[0], counts = d[1]
+      let hy = car["hybrid"] ? "hybrid" : "notHybrid"
+      if (car["year"] in p) {
+        p[car["year"]][hy]["city"] = (p[car["year"]][hy]["city"] * counts[car["year"]][hy] + car["city_mpg"]) / (counts[car["year"]][hy] + 1)
+        p[car["year"]][hy]["highway"] = (p[car["year"]][hy]["highway"] * counts[car["year"]][hy] + car["highway_mpg"]) / (counts[car["year"]][hy] + 1)
+        counts[car["year"]][hy] += 1
+      } else {
+        p[car["year"]] = {
+          "hybrid": {
+            "city": 0, 
+            "highway": 0 
+          },
+          "notHybrid": {
+            "city": 0, 
+            "highway": 0
+          }
+        }
+        p[car["year"]][hy]["city"] = car["city_mpg"]
+        p[car["year"]][hy]["highway"] = car["highway_mpg"]
+
+        counts[car["year"]] = {
+          "hybrid": 0,
+          "notHybrid": 0
+        }
+        counts[car["year"]][hy] = 1
+      }
+      return [p, counts]
+    }, [{},{}])[0]
 };
